@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo02.dto.BoardDTO;
-import com.example.demo02.dto.BoardListReplyCountDTO;
+import com.example.demo02.dto.BoardListAllDTO;
 import com.example.demo02.dto.PageRequestDTO;
 import com.example.demo02.dto.PageResponseDTO;
 import com.example.demo02.service.BoardService;
@@ -30,7 +30,8 @@ public class BoardController {
 	@GetMapping("/list")
 	public void list(PageRequestDTO pageRequestDTO, Model model) {
 		// PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
-		PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
+		//PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
+		PageResponseDTO<BoardListAllDTO> responseDTO = boardService.listWithAll(pageRequestDTO);
 		System.out.println(responseDTO);
 		model.addAttribute("responseDTO", responseDTO);
 	}

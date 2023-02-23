@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.BatchSize;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "bootboard")
+@Entity
 @Getter
 @Builder
 @AllArgsConstructor
@@ -45,8 +47,9 @@ public class Board extends BaseEntity {
 		this.content = content; 
 	}
 	
-	@OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	@Builder.Default
+	@BatchSize(size = 20)
 	private Set<BoardImage> imageSet = new HashSet<>();
 	
 	public void addImage(String uuid, String fileName) {
