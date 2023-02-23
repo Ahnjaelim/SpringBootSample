@@ -2,6 +2,7 @@ package com.example.demo02.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.example.demo02.domain.Board;
+import com.example.demo02.domain.BoardImage;
 import com.example.demo02.dto.BoardListReplyCountDTO;
 
 import lombok.extern.log4j.Log4j2;
@@ -86,7 +88,7 @@ public class BoardRepositoryTest {
 		result.getContent().forEach(board -> log.info(board));
 	}
 	
-	@Test
+	// @Test
 	public void testSearchReplyCount() {
 		String[] types = {"t", "c", "w"};
 		String keyword = "1";
@@ -98,4 +100,25 @@ public class BoardRepositoryTest {
 		log.info(result.hasPrevious()+" : "+result.hasNext());
 		result.getContent().forEach(board -> log.info(board));;
 	}
+	
+	// @Test
+	public void testInsertWithImage() {
+		Board board = Board.builder()
+				.title("Image Test")
+				.content("첨부파일 테스트")
+				.writer("tester")
+				.build();
+		for(int i = 0; i < 3; i++) {
+			board.addImage(UUID.randomUUID().toString(), "file"+i+".jpg");
+		}
+		
+		boardRepository.save(board);
+	}
+	
+	@Test
+	public void testReadWithImages() {
+		
+		log.info(boardRepository.getTime());
+	}
+	
 }

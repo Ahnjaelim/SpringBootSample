@@ -74,7 +74,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary registerBtn">Register</button>
                     <button type="button" class="btn btn-outline-dark closeRegisterBtn" >Close</button>
-                    <button onclick="axiosTest();">비동기 테스트</button>
                 </div>
             </div>
         </div>
@@ -103,7 +102,8 @@
         </div>
     </div> <!--modifyModal -->
 
-<!-- ================================================== -->	
+<!-- ================================================== -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>	
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="/js/reply.js"></script>
 </div>
@@ -124,34 +124,6 @@ document.querySelector(".removeBtn").addEventListener("click",function(e){
 const bno = [[${dto.bno}]]
 const replyList = document.querySelector('.replyList')
 const replyPaging = document.querySelector('.replyPaging')
-
-// ================================================================================ 페이징 출력
-
-function axiosTest(){
-	alert('test');
-    // API로 보낼 데이터를 JSON으로 변환
-    var sendData = JSON.stringify({
-        replyer: "testID",
-        bno: "98",
-        replyText: "axios test"
-    });
- 	alert(sendData);
-    axios({
-        method: "POST",
-        url: `/replies/`,
-        data: sendData,
-        // header에서 JSON 타입의 데이터라는 것을 명시
-        headers: {'Content-type': 'application/json'}
-    }).then((res)=>{
-        alert("성공");
-        // API로 부터 받은 데이터 출력
-        console.log(res.data);
-    }).catch(error=>{
-        console.log("실패");
-        console.log(error);
-    });
-    
-}
 
 // ================================================================================ 페이징 출력
 
@@ -204,7 +176,6 @@ function printReplies(page,size,goLast){
     ).catch(e => {
         console.error(e)
     })
-
 }
 
 printReplies(1,10, true)
@@ -217,7 +188,6 @@ const registerBtn = document.querySelector(".registerBtn")
 const replyText = document.querySelector(".replyText")
 const replyer = document.querySelector(".replyer")
 const closeRegisterBtn = document.querySelector(".closeRegisterBtn")
-
 
 document.querySelector(".addReplyBtn").addEventListener("click", function (e){
     registerModal.show()
@@ -245,6 +215,34 @@ registerBtn.addEventListener("click", function(e){
     })
 }, false)
 
+/*
+registerBtn.addEventListener("click", function(e){
+	var result = "";
+	var url = "/replies/";
+	$.ajax({
+		type : "post",
+		url : url,
+		data : {
+			bno : bno,
+	        replyText:replyText.value,
+	        replyer:replyer.value
+		},
+		async: false,     //값을 리턴시 해당코드를 추가하여 동기로 변경
+		success : function(data){
+			console.log("datecheck ajax 전송 성공");
+			result = data;
+	        registerModal.hide()
+	        replyText.value = ''
+	        replyer.value =''
+	        printReplies(1,10, true) //댓글 목록 갱신			
+		},
+		error : function(result){
+			alert('Error!')
+		}
+	});
+	return result;
+}, false)
+*/
 
 // ================================================================================ 페이징 클릭
 
@@ -276,7 +274,6 @@ const modifyText = document.querySelector(".modifyText")
 const modifyBtn = document.querySelector(".replyModifyBtn")
 const removeBtn = document.querySelector(".replyRemoveBtn")
 const closeModifyBtn = document.querySelector(".closeModifyBtn")
-
 
 replyList.addEventListener("click", function (e){
 
@@ -311,7 +308,6 @@ modifyBtn.addEventListener("click", function(e) {
         rno:replyHeader.innerHTML,
         replyText:modifyText.value}
     modifyReply(replyObj).then(result => {
-		console.log("뭐냐고")
 		console.log(replyObj)
         alert(result.rno+' 댓글이 수정되었습니다.')
         replyText.value = ''
@@ -323,11 +319,44 @@ modifyBtn.addEventListener("click", function(e) {
     })
 },false)
 
-    closeModifyBtn.addEventListener("click", function(e){
 
-        modifyModal.hide()
+/*
+modifyBtn.addEventListener("click", function(e) {
+	var result = "";
+    const replyObj = {
+        bno:bno,
+        rno:replyHeader.innerHTML,
+        replyText:modifyText.value}	
+	var url = `/replies/${replyObj.rno}`;
+	$.ajax({
+		type : "put",
+		url : url,
+		data : {
+	        bno:bno,
+	        rno:replyHeader.innerHTML,
+	        replyText:modifyText.value
+		},
+		contentType:'application/json;charset=UTF-8',
+		success : function(data){
+			console.log("Success!");
+			console.log(modifyText.value);
+	        alert(result.rno+' 댓글이 수정되었습니다.')
+	        replyText.value = ''
+	        modifyModal.hide()
+	        printReplies(page, size)		
+		},
+		error : function(result){
+			alert('Error!')
+		}
+	});
+	return result;
+},false)
+*/
+closeModifyBtn.addEventListener("click", function(e){
 
-    }, false)
+    modifyModal.hide()
+
+}, false)
 
 // ================================================================================ 댓글 삭제
 

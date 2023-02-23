@@ -44,6 +44,7 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Override
 	public void modify(ReplyDTO replyDTO) {
+		log.info(replyDTO);
 		Optional<Reply> replyOptional = replyRepository.findById(replyDTO.getRno());
 		Reply reply = replyOptional.orElseThrow();
 		reply.changeText(replyDTO.getReplyText());
