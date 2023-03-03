@@ -6,7 +6,7 @@ buildscript {
 
 plugins {
    id 'java'
-   id 'org.springframework.boot' version '2.6.4'
+   id 'org.springframework.boot' version '2.7.6'
    id 'io.spring.dependency-management' version '1.1.0'
    // Querydsl
    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"   
@@ -55,17 +55,23 @@ dependencies {
    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jpa"
    
+   // 타임리프 레이아웃
+   implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+   
    // ModelMapper
    implementation 'org.modelmapper:modelmapper:3.1.0'
 
-   implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
-   
    // AJAX
    implementation 'io.springfox:springfox-boot-starter:3.0.0'
    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
    
    // 썸네일
    implementation 'net.coobird:thumbnailator:0.4.16'
+   
+   // 시큐리티
+   implementation 'org.springframework.boot:spring-boot-starter-security'
+   implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+   implementation 'org.springframework.security:spring-security-oauth2-client'
 }
 
 tasks.named('test') {

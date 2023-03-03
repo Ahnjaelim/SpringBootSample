@@ -2,6 +2,7 @@ package com.example.demo02.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,11 +31,13 @@ public class BoardController {
 	@GetMapping("/list")
 	public void list(PageRequestDTO pageRequestDTO, Model model) {
 		// PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
-		//PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
+		// PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
 		PageResponseDTO<BoardListAllDTO> responseDTO = boardService.listWithAll(pageRequestDTO);
 		System.out.println(responseDTO);
 		model.addAttribute("responseDTO", responseDTO);
 	}
+	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/register")
 	public void registerGET(Long bno, Model model) {
 		if(bno==null) {
@@ -46,6 +49,8 @@ public class BoardController {
 			model.addAttribute("dto", boardDTO);	
 		}
 	}
+	
+	@PreAuthorize("principal.username == #boardDTO.writer")
 	@PostMapping("/modify")
 	public String modifyPOST(PageRequestDTO pageRequestDTO, @Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		log.info("<Board Controller> modify POST");
@@ -75,12 +80,16 @@ public class BoardController {
 		redirectAttributes.addFlashAttribute("result", bno);
 		return "redirect:/board/list";
 	}
+	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/read")
 	public void read(Long bno, PageRequestDTO pageRequestDTO, Model model) { 
 		BoardDTO boardDTO = boardService.readOne(bno);
 		log.info(boardDTO);
 		model.addAttribute("dto", boardDTO);	
 	}
+	
+	@PreAuthorize("principal.username == #boardDTO.writer")
 	@PostMapping("/remove")
 	public String remove(Long bno, RedirectAttributes redirectAttributes) {
 		log.info("remove post bno : "+bno);
